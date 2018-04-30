@@ -33,7 +33,7 @@ class BotHandler:
         return last_update
 		
 
-
+token = "584253782:AAGNnxIbuHCCXkfL6UGHDBuikDfon093mBI"
 greet_bot = BotHandler(token)  
 greetings = ('hello', 'hi', 'greetings', 'sup')  
 now = datetime.datetime.now()
