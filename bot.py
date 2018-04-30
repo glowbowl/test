@@ -33,8 +33,7 @@ class BotHandler:
         return last_update
 		
 
-chat_id = get_chat_id(last_update(get_updates_json(url)))
-send_mess(chat_id, 'Your message goes here')
+
 greet_bot = BotHandler(token)  
 greetings = ('hello', 'hi', 'greetings', 'sup')  
 now = datetime.datetime.now()
