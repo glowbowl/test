@@ -1,6 +1,8 @@
 import requests  
 import datetime
 
+url = "https://api.telegram.org/bot584253782:AAGNnxIbuHCCXkfL6UGHDBuikDfon093mBI/"
+
 class BotHandler:
 
     def __init__(self, token):
@@ -30,7 +32,9 @@ class BotHandler:
 
         return last_update
 		
-token = 584253782:AAGNnxIbuHCCXkfL6UGHDBuikDfon093mBI
+
+chat_id = get_chat_id(last_update(get_updates_json(url)))
+send_mess(chat_id, 'Your message goes here')
 greet_bot = BotHandler(token)  
 greetings = ('hello', 'hi', 'greetings', 'sup')  
 now = datetime.datetime.now()
