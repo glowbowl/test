@@ -23,6 +23,11 @@ def start(message):
 def echo_message(message):
     bot.reply_to(message, message.text)
 
+def last_update(data):
+    result = data['result']
+    total_updates = len(result) - 1
+    return result[total_updates]	
+	
 def send_mess(chat, text):
     params = {'chat_id': chat, 'text' : text}
     response = requests.post(url + 'sendMessage', data=params)
