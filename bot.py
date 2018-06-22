@@ -23,6 +23,11 @@ def start(message):
 def echo_message(message):
     bot.reply_to(message, message.text)
 
+def get_updates_json(request):
+    params = {'timeout': 100, 'offset': None}
+    response = requests.get(request + 'getUpdates')
+    return response.json()
+	
 def last_update(data):
     result = data['result']
     total_updates = len(result) - 1
