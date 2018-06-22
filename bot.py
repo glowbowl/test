@@ -48,6 +48,9 @@ def webhook():
 if __name__ == "__main__":
     server.run(host="0.0.0.0", port=int(os.environ.get('PORT', 5000)))
 	start();
+	message = 'Hello'
+	echo_message(message)
+	
 	
 chat_id = get_chat_id(last_update(get_updates_json(url)))
 send_mess(chat_id, 'Suck it')
