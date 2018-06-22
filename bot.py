@@ -12,6 +12,8 @@ TOKEN = '584253782:AAGNnxIbuHCCXkfL6UGHDBuikDfon093mBI'
 bot = telebot.TeleBot(TOKEN)
 server = Flask(__name__)
 
+PORT = int(os.environ.get('PORT', '8443'))
+updater = Updater(TOKEN)
 
 @bot.message_handler(commands=['start'])
 def start(message):
@@ -35,6 +37,11 @@ def webhook():
     bot.set_webhook(url='https://rocky-sierra-97001.herokuapp.com/' + TOKEN)
     return "!", 200
 
+updater.start_webhook(listen="0.0.0.0",
+                      port=PORT,
+                      url_path=TOKEN)
+updater.bot.set_webhook("https://rocky-sierra-97001.herokuapp.com/" + TOKEN)
+updater.idle()
 
 if __name__ == "__main__":
     server.run(host="0.0.0.0", port=int(os.environ.get('PORT', 5000)))
