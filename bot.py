@@ -2,7 +2,7 @@ import requests
 import datetime
 import os
 import telebot
-from flask import flask, request
+from flask import Flask, request
 
 
 url = "https://api.telegram.org/bot584253782:AAGNnxIbuHCCXkfL6UGHDBuikDfon093mBI/"
