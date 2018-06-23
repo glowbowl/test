@@ -1,51 +1,49 @@
-import requests  
+import json 
+import requests
 import datetime
 import os
 import telebot
 from flask import Flask, request
 
-
-url = "https://api.telegram.org/bot584253782:AAGNnxIbuHCCXkfL6UGHDBuikDfon093mBI/"
-
-
-TOKEN = '584253782:AAGNnxIbuHCCXkfL6UGHDBuikDfon093mBI'
+TOKEN = "584253782:AAGNnxIbuHCCXkfL6UGHDBuikDfon093mBI"
+URL = "https://api.telegram.org/bot{}/".format(TOKEN)
 bot = telebot.TeleBot(TOKEN)
 server = Flask(__name__)
 
+def get_url(url):
+    response = requests.get(url)
+    content = response.content.decode("utf8")
+    return content
 
 
-@bot.message_handler(commands=['start'])
-def start(message):
-    bot.reply_to(message, 'Hello, ' + message.from_user.first_name)
+def get_json_from_url(url):
+    content = get_url(url)
+    js = json.loads(content)
+    return js
 
 
-@bot.message_handler(func=lambda message: True, content_types=['text'])
-def echo_message(message):
-    bot.reply_to(message, message.text)
+def get_updates():
+    url = URL + "getUpdates"
+    js = get_json_from_url(url)
+    return js
 
-def get_updates_json(request):
-    params = {'timeout': 100, 'offset': None}
-    response = requests.get(request + 'getUpdates')
-    return response.json()
-	
-def last_update(data):
-    result = data['result']
-    total_updates = len(result) - 1
-    return result[total_updates]	
-	
-def send_mess(chat, text):
-    params = {'chat_id': chat, 'text' : text}
-    response = requests.post(url + 'sendMessage', data=params)
-    return response
-	
-def get_chat_id(update):
-    chat_id = update['message']['chat']['id']
-    return chat_id
 
-@server.route('/' + TOKEN, methods=['POST'])
-def getMessage():
-    bot.process_new_updates([telebot.types.Update.de_json(request.stream.read().decode("utf-8"))])
-    return "!", 200
+def get_last_chat_id_and_text(updates):
+    num_updates = len(updates["result"])
+    last_update = num_updates - 1
+    text = updates["result"][last_update]["message"]["text"]
+    chat_id = updates["result"][last_update]["message"]["chat"]["id"]
+    return (text, chat_id)
+
+
+def send_message(text, chat_id):
+    url = URL + "sendMessage?text={}&chat_id={}".format(text, chat_id)
+    get_url(url)
+    
+#@server.route('/' + TOKEN, methods=['POST'])
+#def getMessage():
+#    bot.process_new_updates([telebot.types.Update.de_json(request.stream.read().decode("utf-8"))])
+ #   return "!", 200
 
 
 @server.route("/")
@@ -54,10 +52,8 @@ def webhook():
     bot.set_webhook(url='https://rocky-sierra-97001.herokuapp.com/' + TOKEN)
     return "!", 200
 
+text, chat = get_last_chat_id_and_text(get_updates())
+send_message(text, chat)
 
-echo_message(message)
-chat_id = get_chat_id(last_update(get_updates_json(url)))
-send_mess(chat_id, 'Suck it')
-	
 if __name__ == "__main__":
     server.run(host="0.0.0.0", port=int(os.environ.get('PORT', 5000)))
