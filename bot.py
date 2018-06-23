@@ -1,16 +1,13 @@
-import json 
+import json
 import requests
-import datetime
-import os
-import telebot
 import time
 import urllib
-from flask import Flask, request
+
+import config
 
 TOKEN = "584253782:AAGNnxIbuHCCXkfL6UGHDBuikDfon093mBI"
 URL = "https://api.telegram.org/bot{}/".format(TOKEN)
-bot = telebot.TeleBot(TOKEN)
-server = Flask(__name__)
+
 
 def get_url(url):
     response = requests.get(url)
