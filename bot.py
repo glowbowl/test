@@ -45,7 +45,7 @@ def webhook():
     bot.remove_webhook()
     bot.set_webhook(url='https://rocky-sierra-97001.herokuapp.com/' + TOKEN)
     return "!", 200
-while(True):
+while True:
 	text, chat = get_last_chat_id_and_text(get_updates())
 	send_message(text, chat)
 
